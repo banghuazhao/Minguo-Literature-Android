@@ -2,12 +2,24 @@
 
 The 民国文学 Android app is an eBook reader that features a rich collection of classic literary works from China. With this app, users can explore famous writings by authors whose works have been featured in Chinese language textbooks for schools. The app also supports a night mode, making it convenient for reading in the dark or before bed, enhancing the overall reading experience.
 
+## Download
+
+Get the app on Google Play:
+
+- [民国文学 (com.appsbay.minguoliteratural)](https://play.google.com/store/apps/details?id=com.appsbay.minguoliteratural)
+
 ## Features
 
 1. **Bookmarking**: Save your reading progress and resume where you left off.
 2. **Font Size Adjustment**: Customize the text size for optimal readability.
 3. **Custom Reading Backgrounds**: Enhance your reading experience by switching between different wallpaper backgrounds.
 4. **AdMob Integration**: Seamless integration of Google AdMob for ads.
+
+## Screenshots
+
+| Home | Book List | Chapter List |
+|------|-----------|-------------|
+| ![Home](screenshots/1.png) | ![Book List](screenshots/2.png) | ![Chapter List](screenshots/3.png) |
 
 ## Installation
 
@@ -33,6 +45,10 @@ app/src/google-services.json
 
 ### Step 4: Build and Run the App
 Build the project and run it on an Android emulator or physical device.
+
+## Repository
+
+Find the source code and contribute on GitHub: [https://github.com/banghuazhao/Minguo-Literature-Android](https://github.com/banghuazhao/Minguo-Literature-Android)
 
 ## Featured Authors
 The app includes works from many renowned authors, such as:
