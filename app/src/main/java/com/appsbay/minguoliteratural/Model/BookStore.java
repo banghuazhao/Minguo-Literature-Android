@@ -27,7 +27,6 @@ public class BookStore {
         add(new Book("故事新编", "故事新编", "鲁迅", "故事新编", BookType.luXun));
         add(new Book("朝花夕拾", "朝花夕拾", "鲁迅", "朝花夕拾", BookType.luXun));
         add(new Book("野草", "野草", "鲁迅", "野草", BookType.luXun));
-        add(new Book("原野", "原野", "鲁迅", "原野", BookType.luXun));
         add(new Book("华盖集", "华盖集", "鲁迅", "华盖集", BookType.luXun));
         add(new Book("坟", "坟", "鲁迅", "坟", BookType.luXun));
 // 张恨水
@@ -52,6 +51,7 @@ public class BookStore {
         add(new Book("围城", "围城", "钱钟书", "围城", BookType.other));
         add(new Book("写在人生边上", "写在人生边上", "钱钟书", "写在人生边上", BookType.other));
         add(new Book("雷雨", "雷雨", "曹禺", "雷雨", BookType.other));
+        add(new Book("原野", "原野", "曹禺", "原野", BookType.other));
         add(new Book("茶馆", "茶馆", "老舍", "茶馆", BookType.other));
         add(new Book("骆驼祥子", "骆驼祥子", "老舍", "骆驼祥子", BookType.other));
         add(new Book("倾城之恋", "倾城之恋", "张爱玲", "倾城之恋", BookType.other));
@@ -100,11 +100,10 @@ public class BookStore {
         add(new Book("故事新编", "故事新編", "魯迅", "故事新編", BookType.luXun_Fan));
         add(new Book("朝花夕拾", "朝花夕拾繁体", "魯迅", "朝花夕拾", BookType.luXun_Fan));
         add(new Book("野草", "野草 (繁體)", "魯迅", "野草_f", BookType.luXun_Fan));
-        add(new Book("原野", "原野 (繁體)", "魯迅", "原野_f", BookType.luXun_Fan));
         add(new Book("华盖集", "華蓋集", "魯迅", "华盖集_f", BookType.luXun_Fan));
         add(new Book("坟", "墳", "魯迅", "坟_f", BookType.luXun_Fan));
 // 張恨水
-        add(new Book("金粉世家", "金粉世家 (繁體)", "张恨水", "金粉世家_f", BookType.zhangHenShui_Fan));
+        add(new Book("金粉世家", "金粉世家 (繁體)", "張恨水", "金粉世家_f", BookType.zhangHenShui_Fan));
         add(new Book("啼笑姻缘", "啼笑姻緣", "張恨水", "啼笑姻緣", BookType.zhangHenShui_Fan));
         add(new Book("啼笑姻缘续集", "啼笑姻緣續集", "張恨水", "啼笑姻緣續集", BookType.zhangHenShui_Fan));
         add(new Book("张恨水散文", "張恨水散文", "張恨水", "張恨水散文", BookType.zhangHenShui_Fan));
@@ -125,6 +124,7 @@ public class BookStore {
         add(new Book("围城", "圍城", "錢鍾書", "圍城", BookType.other_Fan));
         add(new Book("写在人生边上", "寫在人生邊上", "錢鍾書", "写在人生边上_f", BookType.other_Fan));
         add(new Book("雷雨", "雷雨 (繁體)", "曹禺", "雷雨繁体", BookType.other_Fan));
+        add(new Book("原野", "原野 (繁體)", "曹禺", "原野_f", BookType.other_Fan));
         add(new Book("茶馆", "茶館", "老舍", "茶館", BookType.other_Fan));
         add(new Book("骆驼祥子", "駱駝祥子", "老舍", "骆驼祥子_f", BookType.other_Fan));
         add(new Book("倾城之恋", "傾城之戀", "張愛玲", "傾城之戀", BookType.other_Fan));
