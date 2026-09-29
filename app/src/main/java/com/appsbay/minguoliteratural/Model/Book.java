@@ -3,19 +3,6 @@ package com.appsbay.minguoliteratural.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-enum BookType {
-    shenCongWen,
-    luXun,
-    zhangHenShui,
-    baJin,
-    other,
-    shenCongWen_Fan,
-    luXun_Fan,
-    zhangHenShui_Fan,
-    baJin_Fan,
-    other_Fan,
-}
-
 public class Book implements Parcelable {
     String name;
     String author;
@@ -57,6 +44,23 @@ public class Book implements Parcelable {
 
     public String getImageName() {
         return imageName;
+    }
+
+    // The newer reader calls this the cover; Minguo keeps its original asset names.
+    public String getBookCover() {
+        return imageName;
+    }
+
+    public boolean isOnline() {
+        return false;
+    }
+
+    public boolean isCollection() {
+        return false;
+    }
+
+    public String getParent() {
+        return null;
     }
 
     public void setImageName(String imageName) {
@@ -107,4 +111,3 @@ public class Book implements Parcelable {
         }
     };
 }
-

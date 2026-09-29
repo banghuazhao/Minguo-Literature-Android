@@ -116,6 +116,35 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
+# Android Gradle Plugin 8.2 requires JDK 17+. This Mac's default Java is 11, so
+# prefer Android Studio's bundled JBR when the current JAVA_HOME is too old.
+java_major() {
+    "$1" -version 2>&1 | awk -F '"' '/version/ { split($2, a, "."); print a[1]; exit }'
+}
+
+need_jdk17=true
+if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    current_major=$( java_major "$JAVA_HOME/bin/java" )
+    if [ "$current_major" -ge 17 ] 2>/dev/null; then
+        need_jdk17=false
+    fi
+fi
+
+if [ "$need_jdk17" = true ]; then
+    for studio_jbr in \
+        "/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
+        "$HOME/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+    do
+        if [ -x "$studio_jbr/bin/java" ]; then
+            studio_major=$( java_major "$studio_jbr/bin/java" )
+            if [ "$studio_major" -ge 17 ] 2>/dev/null; then
+                JAVA_HOME=$studio_jbr
+                export JAVA_HOME
+                break
+            fi
+        fi
+    done
+fi
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then

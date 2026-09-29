@@ -61,4 +61,10 @@ public class BookLibrary {
         }
         return books;
     }
+
+    public void saveOrder(Context context, java.util.List<Book> orderedBooks) {
+        ArrayList<String> names = new ArrayList<>();
+        for (Book book : orderedBooks) names.add(book.getName());
+        new TinyDB(context).putListString(BookLibrary, names);
+    }
 }

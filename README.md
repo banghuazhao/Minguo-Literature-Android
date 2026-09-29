@@ -10,10 +10,12 @@ Get the app on Google Play:
 
 ## Features
 
-1. **Bookmarking**: Save your reading progress and resume where you left off.
-2. **Font Size Adjustment**: Customize the text size for optimal readability.
-3. **Custom Reading Backgrounds**: Enhance your reading experience by switching between different wallpaper backgrounds.
-4. **AdMob Integration**: Seamless integration of Google AdMob for ads.
+1. **Offline catalog**: Read all 64 works in simplified or traditional Chinese without a download.
+2. **Search and author shelves**: Find books by title or author, then browse an author's works.
+3. **Favorites and progress**: Reorder saved books, resume a chapter, and keep existing bookmarks.
+4. **Reader controls**: Adjust font size, choose a background, and use chapter navigation and text to speech.
+5. **App language**: Choose a display language separately from the book script.
+6. **Ads and optional ad removal**: Supports AdMob, rewarded ad free time, and Play Billing when configured.
 
 ## Screenshots
 
@@ -30,7 +32,7 @@ git clone https://github.com/banghuazhao/Minguo-Literature-Android.git
 ```
 
 ### Step 2: Open the Project in Android Studio
-Ensure that your development environment is set up correctly with Android Studio.
+Use Android Studio with JDK 21 and Android SDK 37. The Gradle wrapper uses Gradle 9.7 and Android Gradle Plugin 9.3.1.
 
 ### Step 3: Configure Google AdMob
 1. Go to the Google Firebase Console.
@@ -40,11 +42,11 @@ Ensure that your development environment is set up correctly with Android Studio
 5. Place the file in the following directory:
 
 ```
-app/src/google-services.json
+app/google-services.json
 ```
 
 ### Step 4: Build and Run the App
-Build the project and run it on an Android emulator or physical device.
+Build the project and run it on an Android emulator or physical device. Debug builds use Google test ad units. Release ad unit IDs can be set in the untracked `local.properties` file; the optional `remove_ads` product must be created for this app in Play Console before its purchase option appears.
 
 ## Repository
 
@@ -67,7 +69,9 @@ The app includes works from many renowned authors, such as:
 * Ding Ling
 * Bing Xin
 * Xu Zhimo
-* Available Works
+* Xiao Hong
+* Yu Dafu
+* Zhu Ziqing
 
 ### Some of the works included in the app are:
 
@@ -115,6 +119,11 @@ The app includes works from many renowned authors, such as:
 * Sobbing Marriage
 * Sequel to Sobbing Marriage
 * Love in a Fallen City
+* The Field of Life and Death (生死场)
+* Sinking (沉沦)
+* Intoxicating Spring Nights (春风沉醉的晚上)
+
+Text provenance for these three additions is recorded in [BOOK_CONTENT_SOURCES.md](BOOK_CONTENT_SOURCES.md).
 
 
 ## Contributions

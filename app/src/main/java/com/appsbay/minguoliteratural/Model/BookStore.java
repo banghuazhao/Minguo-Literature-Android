@@ -8,6 +8,11 @@ import java.util.ArrayList;
 public class BookStore {
     public static BookStore shared = new BookStore();
 
+    // The current catalog is selected by the existing simplified/traditional preference.
+    public ArrayList<Book> books = new ArrayList<>();
+    public ArrayList<Book> allBooks = new ArrayList<>();
+    private Context appContext;
+
     ArrayList<Book> booksChineseSimple = new ArrayList<Book>() {{
 // 沈从文
         add(new Book("边城", "边城", "沈从文", "边城", BookType.shenCongWen));
@@ -24,6 +29,7 @@ public class BookStore {
         add(new Book("野草", "野草", "鲁迅", "野草", BookType.luXun));
         add(new Book("原野", "原野", "鲁迅", "原野", BookType.luXun));
         add(new Book("华盖集", "华盖集", "鲁迅", "华盖集", BookType.luXun));
+        add(new Book("坟", "坟", "鲁迅", "坟", BookType.luXun));
 // 张恨水
         add(new Book("金粉世家", "金粉世家", "张恨水", "金粉世家", BookType.zhangHenShui));
         add(new Book("啼笑姻缘", "啼笑姻缘", "张恨水", "啼笑姻缘", BookType.zhangHenShui));
@@ -55,16 +61,21 @@ public class BookStore {
         add(new Book("京华烟云", "京华烟云", "林语堂", "京华烟云", BookType.other));
         add(new Book("丁玲中短篇作品", "丁玲中短篇作品", "丁玲", "丁玲中短篇作品", BookType.other));
         add(new Book("你是人间四月天", "你是人间四月天", "林徽因", "你是人间四月天", BookType.other));
+        add(new Book("背影", "背影", "朱自清", "背影", BookType.other));
         add(new Book("关于女人", "关于女人", "冰心", "关于女人", BookType.other));
         add(new Book("林语堂散文", "林语堂散文", "林语堂", "林语堂散文", BookType.other));
         add(new Book("石头记索隐", "石头记索隐", "蔡元培", "石头记索隐", BookType.other));
         add(new Book("人·兽·鬼", "人·兽·鬼", "钱钟书", "人·兽·鬼", BookType.other));
         add(new Book("倪焕之", "倪焕之", "叶圣陶", "倪焕之", BookType.other));
         add(new Book("呼兰河传", "呼兰河传", "萧红", "呼兰河传", BookType.other));
+        add(new Book("生死场", "生死场", "萧红", "生死场", BookType.other));
         add(new Book("四世同堂", "四世同堂", "老舍", "四世同堂", BookType.other));
+        add(new Book("赵子曰", "赵子曰", "老舍", "赵子曰", BookType.other));
         add(new Book("生活的艺术", "生活的艺术", "林语堂", "生活的艺术", BookType.other));
         add(new Book("稻草人", "稻草人", "叶圣陶", "稻草人", BookType.other));
         add(new Book("迷羊", "迷羊", "郁达夫", "迷羊", BookType.other));
+        add(new Book("沉沦", "沉沦", "郁达夫", "沉沦", BookType.other));
+        add(new Book("春风沉醉的晚上", "春风沉醉的晚上", "郁达夫", "春风沉醉的晚上", BookType.other));
         add(new Book("人生随感", "人生随感", "徐志摩", "人生随感", BookType.other));
         add(new Book("高山氤氲", "高山氤氲", "徐志摩", "高山氤氲", BookType.other));
         add(new Book("云游心踪", "云游心踪", "徐志摩", "云游心踪", BookType.other));
@@ -91,6 +102,7 @@ public class BookStore {
         add(new Book("野草", "野草 (繁體)", "魯迅", "野草_f", BookType.luXun_Fan));
         add(new Book("原野", "原野 (繁體)", "魯迅", "原野_f", BookType.luXun_Fan));
         add(new Book("华盖集", "華蓋集", "魯迅", "华盖集_f", BookType.luXun_Fan));
+        add(new Book("坟", "墳", "魯迅", "坟_f", BookType.luXun_Fan));
 // 張恨水
         add(new Book("金粉世家", "金粉世家 (繁體)", "张恨水", "金粉世家_f", BookType.zhangHenShui_Fan));
         add(new Book("啼笑姻缘", "啼笑姻緣", "張恨水", "啼笑姻緣", BookType.zhangHenShui_Fan));
@@ -122,16 +134,21 @@ public class BookStore {
         add(new Book("京华烟云", "京華煙雲", "林語堂", "京华烟云_f", BookType.other_Fan));
         add(new Book("丁玲中短篇作品", "丁玲中短篇作品 (繁體)", "丁玲", "丁玲中短篇作品_f", BookType.other_Fan));
         add(new Book("你是人间四月天", "你是人間四月天", "林徽因", "你是人间四月天_f", BookType.other_Fan));
+        add(new Book("背影", "背影", "朱自清", "背影_f", BookType.other_Fan));
         add(new Book("关于女人", "關於女人", "冰心", "关于女人_f", BookType.other_Fan));
         add(new Book("林语堂散文", "林語堂散文", "林語堂", "林语堂散文_f", BookType.other_Fan));
         add(new Book("石头记索隐", "石頭記索隱", "蔡元培", "石头记索隐_f", BookType.other_Fan));
         add(new Book("人·兽·鬼", "人·獸·鬼", "錢鍾書", "人·兽·鬼_f", BookType.other_Fan));
         add(new Book("倪焕之", "倪煥之", "葉聖陶", "倪焕之_f", BookType.other_Fan));
         add(new Book("呼兰河传", "呼蘭河傳", "蕭紅", "呼兰河传_f", BookType.other_Fan));
+        add(new Book("生死场", "生死場", "蕭紅", "生死场_f", BookType.other_Fan));
         add(new Book("四世同堂", "四世同堂 (繁體)", "老舍", "四世同堂_f", BookType.other_Fan));
+        add(new Book("赵子曰", "趙子曰", "老舍", "赵子曰_f", BookType.other_Fan));
         add(new Book("生活的艺术", "生活的藝術", "林語堂", "生活的艺术_f", BookType.other_Fan));
         add(new Book("稻草人", "稻草人 (繁體)", "葉聖陶", "稻草人_f", BookType.other_Fan));
-        add(new Book("迷羊", "迷羊 (繁體)", "鬱達夫", "迷羊_f", BookType.other_Fan));
+        add(new Book("迷羊", "迷羊 (繁體)", "郁達夫", "迷羊_f", BookType.other_Fan));
+        add(new Book("沉沦", "沉淪", "郁達夫", "沉沦_f", BookType.other_Fan));
+        add(new Book("春风沉醉的晚上", "春風沉醉的晚上", "郁達夫", "春风沉醉的晚上_f", BookType.other_Fan));
         add(new Book("人生随感", "人生隨感", "徐志摩", "人生随感_f", BookType.other_Fan));
         add(new Book("高山氤氲", "高山氤氲 (繁體)", "徐志摩", "高山氤氲_f", BookType.other_Fan));
         add(new Book("云游心踪", "雲遊心踪", "徐志摩", "云游心踪_f", BookType.other_Fan));
@@ -154,6 +171,33 @@ public class BookStore {
         }
 
         return books;
+    }
+
+    public void fetchFromLocal(Context context) {
+        appContext = context.getApplicationContext();
+        allBooks.clear();
+        allBooks.addAll(booksChineseSimple);
+        allBooks.addAll(booksChineseTraditional);
+        updateLanguage(context);
+    }
+
+    public void updateLanguage(Context context) {
+        appContext = context.getApplicationContext();
+        books.clear();
+        books.addAll(getBooks(context));
+    }
+
+    public ArrayList<Book> getAllBooks(Context context) {
+        if (allBooks.isEmpty()) fetchFromLocal(context);
+        return allBooks;
+    }
+
+    public ArrayList<Book> getBooksForCollection(Book book) {
+        return new ArrayList<>();
+    }
+
+    public Context getAppContext() {
+        return appContext;
     }
 
 }

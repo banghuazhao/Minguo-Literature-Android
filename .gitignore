@@ -27,3 +27,6 @@ app/google-services.json
 app/release
 
 shinebuttonlib/build
+/keystore.properties
+*.jks
+*.keystore
