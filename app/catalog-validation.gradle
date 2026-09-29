@@ -1,0 +1,157 @@
+import groovy.json.JsonSlurper
+import java.text.Normalizer
+import javax.imageio.ImageIO
+
+/** Validate the shipping catalog against every bundled edition and cover. */
+tasks.register('validateCatalog') {
+    group = 'verification'
+    description = 'Checks book IDs, both scripts, JSON chapters, covers, and literary copy.'
+
+    def catalogSource = file('src/main/java/com/appsbay/minguoliteratural/Model/BookStore.java')
+    def assets = file('src/main/assets')
+    inputs.file(catalogSource)
+    inputs.files(fileTree('src/main/assets/files') { include '*.json' })
+    inputs.files(fileTree('src/main/assets/covers') { include '*.png' })
+    inputs.files(fileTree('src/main/assets/literary_copy') { include '*.json' })
+
+    doLast {
+        def errors = []
+        def knownEmpty = []
+        def parser = new JsonSlurper()
+        def normalized = { String value -> Normalizer.normalize(value.trim(), Normalizer.Form.NFC) }
+        def source = catalogSource.getText('UTF-8')
+        def pattern = ~/add\s*\(\s*new Book\s*\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*,\s*"([^"]+)"\s*,\s*"([^"]+)"\s*,\s*BookType\.([A-Za-z0-9_]+)\s*\)\s*\)\s*;/
+        def entries = []
+        def matcher = source =~ pattern
+        matcher.each { match ->
+            entries << [id: match[1], title: match[2], author: match[3],
+                        file: match[4], type: match[5], traditional: match[5].endsWith('_Fan')]
+        }
+        if (entries.isEmpty()) errors << 'No BookStore entries found; update the catalog parser if its format changed.'
+
+        def byId = entries.groupBy { it.id }
+        def byFile = entries.groupBy { it.file }
+        byId.each { id, editions ->
+            if (editions.size() != 2 || editions.count { it.traditional } != 1) {
+                errors << "${id}: expected one simplified and one traditional edition"
+            } else if (editions[0].type.replace('_Fan', '') != editions[1].type.replace('_Fan', '')) {
+                errors << "${id}: edition categories differ"
+            }
+        }
+        byFile.each { name, editions ->
+            if (editions.size() != 1) errors << "${name}.json is shared by multiple editions"
+        }
+
+        def copy = [:]
+        ['books', 'books_f', 'authors', 'authors_f'].each { name ->
+            def path = new File(assets, "literary_copy/${name}.json")
+            try {
+                def data = parser.parse(path, 'UTF-8')
+                if (!(data instanceof Map)) {
+                    errors << "${path.name}: expected an object"
+                    copy[name] = [:]
+                } else {
+                    copy[name] = data.collectEntries { key, value ->
+                        [(normalized(key.toString())): value]
+                    }
+                }
+            } catch (Exception e) {
+                errors << "${path.name}: ${e.message}"
+                copy[name] = [:]
+            }
+        }
+
+        // These empty sections already ship without source text. Keep them visible
+        // until reliable source material is found; new empty sections fail the build.
+        def allowedEmptySections = [
+                '华盖集#15', '华盖集#29', '华盖集_f#15', '华盖集_f#29',
+                '雷雨#1', '雷雨繁体#1'
+        ] as Set
+        def presentEmptySections = [] as Set
+
+        entries.each { book ->
+            def label = "${book.title} (${book.traditional ? 'traditional' : 'simplified'})"
+            if (!(book.id?.trim() && book.title?.trim() && book.author?.trim() && book.file?.trim())) {
+                errors << "${label}: blank catalog field"
+                return
+            }
+            def introMap = copy[book.traditional ? 'books_f' : 'books']
+            def authorMap = copy[book.traditional ? 'authors_f' : 'authors']
+            if (!(introMap[normalized(book.title)] instanceof String) ||
+                    !introMap[normalized(book.title)].trim()) errors << "${label}: missing book introduction"
+            if (!(authorMap[normalized(book.author)] instanceof String) ||
+                    !authorMap[normalized(book.author)].trim()) errors << "${label}: missing author biography"
+
+            def cover = new File(assets, "covers/${book.id}.png")
+            if (!cover.isFile()) {
+                errors << "${label}: missing cover ${cover.name}"
+            } else {
+                try {
+                    def image = ImageIO.read(cover)
+                    if (image == null || image.width < 200 || image.height < 300 ||
+                            image.width > 1200 || image.height > 1800) {
+                        errors << "${label}: invalid cover dimensions"
+                    }
+                    if (cover.length() > 200 * 1024) errors << "${label}: cover exceeds 200 KiB"
+                } catch (Exception e) {
+                    errors << "${label}: unreadable cover: ${e.message}"
+                }
+            }
+
+            def path = new File(assets, "files/${book.file}.json")
+            if (!path.isFile()) {
+                errors << "${label}: missing text ${path.name}"
+                return
+            }
+            try {
+                def root = parser.parse(path, 'UTF-8')
+                if (!(root instanceof Map) || root.size() != 1 ||
+                        !root.containsKey(book.title) || !(root[book.title] instanceof List) ||
+                        root[book.title].isEmpty()) {
+                    errors << "${label}: JSON must have one nonempty chapter array under the display title"
+                    return
+                }
+                root[book.title].eachWithIndex { chapter, index ->
+                    if (!(chapter instanceof Map)) {
+                        errors << "${label}: chapter ${index + 1} is not an object"
+                        return
+                    }
+                    def number = chapter['章节'] ?: chapter['章節']
+                    def name = chapter['章节名称'] ?: chapter['章節名稱']
+                    def body = chapter.containsKey('章节内容') ? chapter['章节内容'] : chapter['章節內容']
+                    if (!(number instanceof String) || !number.trim() ||
+                            !(name instanceof String) || !name.trim() || !(body instanceof String)) {
+                        errors << "${label}: chapter ${index + 1} has invalid fields"
+                    } else if (!body.trim()) {
+                        def section = "${book.file}#${index}".toString()
+                        if (allowedEmptySections.contains(section)) {
+                            knownEmpty << "${label}: chapter ${index + 1} has no source text"
+                            presentEmptySections << section
+                        } else {
+                            errors << "${label}: chapter ${index + 1} has no text"
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                errors << "${label}: invalid JSON: ${e.message}"
+            }
+        }
+
+        def orphanTexts = (fileTree('src/main/assets/files') { include '*.json' }.files*.name as Set) -
+                (entries.collect { "${it.file}.json" } as Set)
+        def orphanCovers = (fileTree('src/main/assets/covers') { include '*.png' }.files*.name as Set) -
+                (entries.collect { "${it.id}.png" } as Set)
+        if (orphanTexts) errors << "Unlisted text assets: ${orphanTexts.sort().join(', ')}"
+        if (orphanCovers) errors << "Unlisted covers: ${orphanCovers.sort().join(', ')}"
+
+        if (errors) {
+            throw new GradleException("Catalog validation failed (${errors.size()}):\n - " +
+                    errors.join('\n - '))
+        }
+        logger.lifecycle("Catalog validated: ${byId.size()} works, ${entries.size()} editions, " +
+                "${knownEmpty.size()} known empty sections")
+        knownEmpty.each { logger.warn("Catalog source gap: ${it}") }
+    }
+}
+
+tasks.named('preBuild').configure { dependsOn tasks.named('validateCatalog') }

@@ -57,14 +57,21 @@ class BookRepository private constructor(context: Context) {
             val chapter = array.getJSONObject(i)
             chapters.add(
                 BookChapter(
-                    chapter.getString("章节"),
-                    chapter.getString("章节名称"),
-                    chapter.getString("章节内容")
+                    chapterField(chapter, "章节", "章節"),
+                    chapterField(chapter, "章节名称", "章節名稱"),
+                    chapterField(chapter, "章节内容", "章節內容")
                 )
             )
         }
         return chapters
     }
+
+    private fun chapterField(chapter: JSONObject, simplified: String, traditional: String): String =
+        when {
+            chapter.has(simplified) -> chapter.getString(simplified)
+            chapter.has(traditional) -> chapter.getString(traditional)
+            else -> throw JSONException("Missing chapter field: $simplified / $traditional")
+        }
 
     companion object {
         @Volatile private var instance: BookRepository? = null

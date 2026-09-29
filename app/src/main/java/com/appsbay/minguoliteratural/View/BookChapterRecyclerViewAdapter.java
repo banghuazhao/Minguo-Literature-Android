@@ -2,7 +2,6 @@ package com.appsbay.minguoliteratural.View;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,8 +92,7 @@ public class BookChapterRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             chapterHolder.separator.setBackgroundColor(MyColor.getSeparatorColor(context));
         }
 
-        SharedPreferences preferences = context.getSharedPreferences("Bookmarks", Context.MODE_PRIVATE);
-        int bookmarkNumber = preferences.getInt(book.getName(), 0);
+        int bookmarkNumber = ReadingProgressHelper.getChapterIndex(context, book);
         if (chapterIndex == bookmarkNumber) {
             chapterHolder.bookmark.setImageDrawable(MyImage.changeDrawableColor(context, R.drawable.nav_bookmark, MyColor.getAccentColor(context)));
         } else {
@@ -132,7 +130,7 @@ public class BookChapterRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         if (bookChapters.isEmpty()) {
             return;
         }
-        int chapterIndex = ReadingProgressHelper.getChapterIndex(context, book.getName());
+        int chapterIndex = ReadingProgressHelper.getChapterIndex(context, book);
         if (chapterIndex < 0 || chapterIndex >= bookChapters.size()) {
             chapterIndex = 0;
         }

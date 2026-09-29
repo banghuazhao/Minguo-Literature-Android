@@ -42,10 +42,10 @@ class ReaderViewModel(
     fun getChapterIndex(): Int = chapterIndex
 
     fun getSavedScrollFraction(): Float {
-        val savedIndex = readingRepository.getChapterIndex(book.name)
+        val savedIndex = readingRepository.getChapterIndex(book)
         if (savedIndex >= 0 && savedIndex != chapterIndex) return 0f
-        if (readingRepository.hasScrollFraction(book.name)) {
-            return readingRepository.getScrollFraction(book.name)
+        if (readingRepository.hasScrollFraction(book)) {
+            return readingRepository.getScrollFraction(book)
         }
         // Older Minguo releases stored a separate scroll bookmark per chapter.
         return readingRepository.getLegacyScrollFraction(
@@ -62,12 +62,12 @@ class ReaderViewModel(
         val index = if (chapterIndex >= 0) {
             chapterIndex
         } else {
-            readingRepository.getChapterIndex(book.name).coerceAtLeast(0)
+            readingRepository.getChapterIndex(book).coerceAtLeast(0)
         }
         val total = if (totalChapters > 0) {
             totalChapters
         } else {
-            readingRepository.getTotalChapters(book.name)
+            readingRepository.getTotalChapters(book)
         }
         readingRepository.saveSession(
             book = book,

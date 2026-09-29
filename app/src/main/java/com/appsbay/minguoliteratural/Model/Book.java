@@ -46,6 +46,16 @@ public class Book implements Parcelable {
         return imageName;
     }
 
+    /** Stable work ID shared by both scripts. Keep this value when changing cover artwork. */
+    public String getCatalogId() {
+        return imageName;
+    }
+
+    /** A reading position belongs to one text edition. */
+    public String getEditionId() {
+        return imageName + (bookType.name().endsWith("_Fan") ? ":hant" : ":hans");
+    }
+
     // The newer reader calls this the cover; Minguo keeps its original asset names.
     public String getBookCover() {
         return imageName;

@@ -152,4 +152,23 @@
     <string name="genre_crime_full">其他</string>
     <string name="Language">Language</string>
     <string name="language_system_default">System default</string>
+    <string name="read_aloud">Read aloud</string>
+    <string name="tts_voice">Voice</string>
+    <string name="tts_voice_auto">Automatic (book script)</string>
+    <string name="tts_voice_mainland">Chinese · Mainland</string>
+    <string name="tts_voice_taiwan">Chinese · Taiwan</string>
+    <string name="tts_voice_hong_kong">Chinese · Hong Kong</string>
+    <string name="tts_speed">Speed</string>
+    <string name="tts_speed_value">Speed: %1$.1f×</string>
+    <string name="tts_ready">Ready to read</string>
+    <string name="tts_initializing">Preparing voice…</string>
+    <string name="tts_reading">Reading aloud</string>
+    <string name="tts_paused">Paused</string>
+    <string name="tts_start">Start</string>
+    <string name="tts_pause">Pause</string>
+    <string name="tts_resume">Resume</string>
+    <string name="tts_stop">Stop</string>
+    <string name="tts_no_text">No text to read in this chapter</string>
+    <string name="tts_voice_unavailable">The selected Chinese voice is unavailable on this device</string>
+    <string name="tts_start_failed">Could not start read aloud</string>
 </resources>

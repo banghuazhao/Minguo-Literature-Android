@@ -112,7 +112,7 @@ public final class BookDetailHeader {
         }
 
         Context context = button.getContext();
-        boolean hasProgress = ReadingProgressHelper.getChapterIndex(context, book.getName()) >= 0;
+        boolean hasProgress = ReadingProgressHelper.getChapterIndex(context, book) >= 0;
         button.setVisibility(View.VISIBLE);
         button.setText(hasProgress ? R.string.continue_reading : R.string.Begin_Reading);
         button.setTextColor(accentColor);

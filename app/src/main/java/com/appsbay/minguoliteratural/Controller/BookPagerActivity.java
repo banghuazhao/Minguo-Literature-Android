@@ -10,13 +10,11 @@ import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,13 +41,13 @@ import com.appsbay.minguoliteratural.Tools.LocalBroadcastHelper;
 import com.appsbay.minguoliteratural.Tools.MyColor;
 import com.appsbay.minguoliteratural.Tools.MyImage;
 import com.appsbay.minguoliteratural.Tools.ReaderOptionsSheet;
+import com.appsbay.minguoliteratural.Tools.ReaderSpeechController;
 import com.appsbay.minguoliteratural.Tools.ScreenChrome;
 import com.appsbay.minguoliteratural.viewmodel.NovelsHubViewModelFactory;
 import com.appsbay.minguoliteratural.viewmodel.ReaderViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
-import java.util.Locale;
 
 public class BookPagerActivity extends AppCompatActivity {
     Book book;
@@ -67,7 +65,7 @@ public class BookPagerActivity extends AppCompatActivity {
 
     Context mContext;
 
-    TextToSpeech tts;
+    private ReaderSpeechController speechController;
     private long readingStartedAt;
     private int restoredScrollY;
     private boolean didScroll;
@@ -104,6 +102,7 @@ public class BookPagerActivity extends AppCompatActivity {
             finish();
             return;
         }
+        speechController = new ReaderSpeechController(this, book);
         chapterIndex = intent.getIntExtra("chapterIndex", -1);
         totalChapters = intent.getIntExtra("totalChapters", 0);
 
@@ -561,7 +560,7 @@ public class BookPagerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(backgroundReceiver);
-        stopSpeaking();
+        if (speechController != null) speechController.shutdown();
         super.onDestroy();
     }
 
@@ -579,11 +578,7 @@ public class BookPagerActivity extends AppCompatActivity {
     };
 
     private void stopSpeaking() {
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-            tts = null;
-        }
+        if (speechController != null) speechController.stop();
     }
 
     private void configColor() {
@@ -637,27 +632,9 @@ public class BookPagerActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onToggleSpeech() {
-                if (tts != null && tts.isSpeaking()) {
-                    stopSpeaking();
-                } else {
-                    tts = new TextToSpeech(mContext, status -> {
-                        if (status == TextToSpeech.SUCCESS) {
-                            int result = tts.setLanguage(Locale.ENGLISH);
-                            if (result == TextToSpeech.LANG_MISSING_DATA
-                                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                                Log.e("error", "This Language is not supported");
-                            } else {
-                                speech(bookChapter.getText());
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public boolean isSpeaking() {
-                return tts != null && tts.isSpeaking();
+            public void onReadAloudSelected() {
+                ReaderOptionsSheet.showSpeech(BookPagerActivity.this,
+                        speechController, bookChapter.getText());
             }
         });
     }
@@ -687,47 +664,6 @@ public class BookPagerActivity extends AppCompatActivity {
             return 0f;
         }
         return (float) scrollView.getScrollY() / height;
-    }
-
-    private void speech(String charSequence) {
-        if (tts == null || charSequence == null || charSequence.isEmpty()) {
-            return;
-        }
-        // TextToSpeech rejects anything past its max input length, so feed it
-        // sentence-sized chunks instead of cutting words in half.
-        int maxLength = Math.max(200, TextToSpeech.getMaxSpeechInputLength() - 1);
-        int start = 0;
-        int length = charSequence.length();
-        while (start < length) {
-            int end = Math.min(start + maxLength, length);
-            if (end < length) {
-                int boundary = lastBreakBefore(charSequence, start, end);
-                if (boundary > start) {
-                    end = boundary;
-                }
-            }
-            String chunk = charSequence.substring(start, end).trim();
-            if (!chunk.isEmpty()) {
-                tts.speak(chunk, TextToSpeech.QUEUE_ADD, null, "chapter-" + start);
-            }
-            start = end;
-        }
-    }
-
-    /** Last sentence end (or failing that, whitespace) inside [start, end). */
-    private static int lastBreakBefore(String text, int start, int end) {
-        for (int i = end - 1; i > start; i--) {
-            char c = text.charAt(i);
-            if (c == '.' || c == '!' || c == '?' || c == '\n') {
-                return i + 1;
-            }
-        }
-        for (int i = end - 1; i > start; i--) {
-            if (Character.isWhitespace(text.charAt(i))) {
-                return i + 1;
-            }
-        }
-        return end;
     }
 
     @Override

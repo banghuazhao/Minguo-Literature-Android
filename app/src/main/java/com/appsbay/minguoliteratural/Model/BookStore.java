@@ -98,7 +98,7 @@ public class BookStore {
         add(new Book("彷徨", "彷徨 (繁體)", "魯迅", "彷徨繁体", BookType.luXun_Fan));
         add(new Book("呐喊", "吶喊", "魯迅", "吶喊", BookType.luXun_Fan));
         add(new Book("故事新编", "故事新編", "魯迅", "故事新編", BookType.luXun_Fan));
-        add(new Book("朝花夕拾", "朝花夕拾繁体", "魯迅", "朝花夕拾", BookType.luXun_Fan));
+        add(new Book("朝花夕拾", "朝花夕拾繁体", "魯迅", "朝花夕拾繁体", BookType.luXun_Fan));
         add(new Book("野草", "野草 (繁體)", "魯迅", "野草_f", BookType.luXun_Fan));
         add(new Book("华盖集", "華蓋集", "魯迅", "华盖集_f", BookType.luXun_Fan));
         add(new Book("坟", "墳", "魯迅", "坟_f", BookType.luXun_Fan));

@@ -120,4 +120,23 @@
     <string name="genre_crime_full">其他</string>
     <string name="Language">語言</string>
     <string name="language_system_default">跟隨系統</string>
+    <string name="read_aloud">朗讀</string>
+    <string name="tts_voice">語音</string>
+    <string name="tts_voice_auto">自動（依書籍文字）</string>
+    <string name="tts_voice_mainland">中文 · 大陸</string>
+    <string name="tts_voice_taiwan">中文 · 台灣</string>
+    <string name="tts_voice_hong_kong">中文 · 香港</string>
+    <string name="tts_speed">語速</string>
+    <string name="tts_speed_value">語速：%1$.1f×</string>
+    <string name="tts_ready">準備朗讀</string>
+    <string name="tts_initializing">正在準備語音…</string>
+    <string name="tts_reading">正在朗讀</string>
+    <string name="tts_paused">已暫停</string>
+    <string name="tts_start">開始</string>
+    <string name="tts_pause">暫停</string>
+    <string name="tts_resume">繼續</string>
+    <string name="tts_stop">停止</string>
+    <string name="tts_no_text">本章沒有可朗讀的文字</string>
+    <string name="tts_voice_unavailable">此裝置沒有所選的中文語音</string>
+    <string name="tts_start_failed">無法開始朗讀</string>
 </resources>
