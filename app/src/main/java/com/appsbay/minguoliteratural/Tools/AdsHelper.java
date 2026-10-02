@@ -13,6 +13,9 @@ public final class AdsHelper {
     }
 
     public static boolean shouldShowAds(Context context) {
+        if (!ConsentManager.get(context).canRequestAds()) {
+            return false;
+        }
         if (BillingManager.get(context).isAdFree()) {
             return false;
         }

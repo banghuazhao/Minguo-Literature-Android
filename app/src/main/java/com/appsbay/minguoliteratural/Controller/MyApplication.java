@@ -1,6 +1,8 @@
 package com.appsbay.minguoliteratural.Controller;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.appsbay.minguoliteratural.Model.BookStore;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class MyApplication extends Application {
 
     private static AppOpenManager appOpenManager;
+    private boolean mobileAdsStarted;
 
     @Override
     public void onCreate() {
@@ -33,13 +36,23 @@ public class MyApplication extends Application {
         }
         BookStore.shared.fetchFromLocal(this);
         LiteraryCopy.shared.fetchFromLocal(this);
-        BillingManager.get(this);
-
-        new Thread(
-                () -> MobileAds.initialize(this, this::onMobileAdsInitialized)
-        ).start();
 
         appOpenManager = new AppOpenManager(this);
+    }
+
+    public synchronized void startMobileAds() {
+        if (mobileAdsStarted) {
+            return;
+        }
+        mobileAdsStarted = true;
+        BillingManager.get(this).refreshProducts();
+        new Thread(() -> MobileAds.initialize(this, this::onMobileAdsInitialized)).start();
+    }
+
+    public void clearPreloadedAppOpenAd() {
+        if (appOpenManager != null) {
+            appOpenManager.clearPreloaded();
+        }
     }
 
     private void onMobileAdsInitialized(InitializationStatus initializationStatus) {
@@ -53,7 +66,9 @@ public class MyApplication extends Application {
                     "Adapter name: %s, Description: %s, Latency: %d",
                     adapterClass, status.getDescription(), status.getLatency()));
         }
-        AdCoordinator.get(MyApplication.this).preloadInterstitial();
-        RewardedAdHelper.get(MyApplication.this).preload();
+        new Handler(Looper.getMainLooper()).post(() -> {
+            AdCoordinator.get(MyApplication.this).preloadInterstitial();
+            RewardedAdHelper.get(MyApplication.this).preload();
+        });
     }
 }

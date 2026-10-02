@@ -3,6 +3,7 @@ package com.appsbay.minguoliteratural.Controller.Menu;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.appsbay.minguoliteratural.Controller.Menu.MoreApps.MoreAppsActivity;
 import com.appsbay.minguoliteratural.Model.BookStore;
 import com.appsbay.minguoliteratural.R;
 import com.appsbay.minguoliteratural.Tools.BillingManager;
+import com.appsbay.minguoliteratural.Tools.AgeGate;
+import com.appsbay.minguoliteratural.Tools.ConsentManager;
 import com.appsbay.minguoliteratural.Tools.DialogChrome;
 import com.appsbay.minguoliteratural.Tools.HelperFunctions;
 import com.appsbay.minguoliteratural.Tools.LocaleHelper;
@@ -108,6 +111,23 @@ public class MenuItemRecyclerViewAdapter extends RecyclerView.Adapter<MenuItemRe
                     break;
                 case MenuItem.ACTION_BOOK_LANGUAGE:
                     showBookLanguagePicker();
+                    break;
+                case MenuItem.ACTION_PRIVACY:
+                    if (context instanceof Activity) {
+                        ConsentManager.get(context).showPrivacyOptions((Activity) context);
+                    }
+                    break;
+                case MenuItem.ACTION_ADVERTISING_AGE:
+                    if (context instanceof Activity
+                            && ConsentManager.get(context).hasCompletedRequest()) {
+                        Activity activity = (Activity) context;
+                        new AgeGate(context).show(activity,
+                                () -> ConsentManager.get(context).onAgeChoiceChanged(activity));
+                    }
+                    break;
+                case MenuItem.ACTION_PRIVACY_POLICY:
+                    context.startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(context.getString(R.string.privacy_policy_url))));
                     break;
                 default:
                     break;

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Feedback">Feedback</string>
+    <string name="privacy_settings">Datenschutzeinstellungen</string>
+    <string name="age_gate_settings">Alter für Werbung</string>
+    <string name="age_gate_title">Geburtsdatum</string>
+    <string name="age_gate_message">Gib dein Geburtsdatum ein, um die Werbeoptionen festzulegen. Es bleibt auf diesem Gerät. Du kannst ohne Eingabe fortfahren; Werbung bleibt dann aus. Du kannst es unter Mehr → Alter für Werbung ändern.</string>
+    <string name="age_gate_year">Jahr</string>
+    <string name="age_gate_month">Monat</string>
+    <string name="age_gate_day">Tag</string>
+    <string name="age_gate_continue">Weiter</string>
+    <string name="age_gate_skip">Ohne Werbung fortfahren</string>
+    <string name="age_gate_invalid">Gib ein gültiges Geburtsdatum ein</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="ads_privacy_policy_link">Datenschutzerklärung lesen</string>
+    <string name="ads_privacy_title">Deine Wahl zur Werbung</string>
+    <string name="ads_privacy_message">Diese App kann Werbung von Google AdMob und seinen Partnern anzeigen. Wenn du Werbung erlaubst, können sie deine Werbe-ID und deine Aktivitäten in der App verwenden, um Werbung auszuwählen und zu messen. Wähle „Meine Daten nicht verkaufen oder weitergeben“, um die App ohne Werbeanfragen zu nutzen. Du kannst dies jederzeit unter Mehr → Datenschutzeinstellungen ändern.</string>
+    <string name="ads_privacy_allow">Werbung und Datenweitergabe erlauben</string>
+    <string name="ads_privacy_no_ads">Meine Daten nicht verkaufen oder weitergeben</string>
     <string name="Menu">Mehr</string>
     <string name="Rate">App bewerten</string>
     <string name="Share">App teilen</string>

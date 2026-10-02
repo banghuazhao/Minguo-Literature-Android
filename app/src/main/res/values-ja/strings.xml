@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Feedback">フィードバック</string>
+    <string name="privacy_settings">プライバシー設定</string>
+    <string name="age_gate_settings">広告用の年齢</string>
+    <string name="age_gate_title">生年月日</string>
+    <string name="age_gate_message">広告の設定のために生年月日を入力してください。生年月日はこの端末内にのみ保存されます。入力せずに続けることもでき、その場合は広告は表示されません。「その他 → 広告用の年齢」から変更できます。</string>
+    <string name="age_gate_year">年</string>
+    <string name="age_gate_month">月</string>
+    <string name="age_gate_day">日</string>
+    <string name="age_gate_continue">続ける</string>
+    <string name="age_gate_skip">広告なしで続ける</string>
+    <string name="age_gate_invalid">有効な生年月日を入力してください</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="ads_privacy_policy_link">プライバシーポリシーを読む</string>
+    <string name="ads_privacy_title">広告に関する選択</string>
+    <string name="ads_privacy_message">このアプリには Google AdMob とそのパートナーの広告を表示できます。広告を許可すると、広告 ID とアプリ内の利用状況が広告の選択や測定に使われる場合があります。「データを販売・共有しない」を選ぶと、広告リクエストなしで利用できます。この設定は「その他 → プライバシー設定」からいつでも変更できます。</string>
+    <string name="ads_privacy_allow">広告とデータ共有を許可する</string>
+    <string name="ads_privacy_no_ads">データを販売・共有しない</string>
     <string name="Menu">その他</string>
     <string name="Rate">アプリを評価</string>
     <string name="Share">アプリを共有</string>

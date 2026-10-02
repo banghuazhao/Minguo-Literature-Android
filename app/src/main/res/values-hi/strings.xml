@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Feedback">फ़ीडबैक</string>
+    <string name="privacy_settings">गोपनीयता सेटिंग</string>
+    <string name="age_gate_settings">विज्ञापनों के लिए उम्र</string>
+    <string name="age_gate_title">जन्म तिथि</string>
+    <string name="age_gate_message">विज्ञापन विकल्प तय करने के लिए अपनी जन्म तिथि दर्ज करें। यह केवल इस डिवाइस पर रहती है। आप इसे दर्ज किए बिना जारी रख सकते हैं; विज्ञापन बंद रहेंगे। इसे अधिक → विज्ञापनों के लिए उम्र में बदल सकते हैं।</string>
+    <string name="age_gate_year">वर्ष</string>
+    <string name="age_gate_month">महीना</string>
+    <string name="age_gate_day">दिन</string>
+    <string name="age_gate_continue">जारी रखें</string>
+    <string name="age_gate_skip">विज्ञापनों के बिना जारी रखें</string>
+    <string name="age_gate_invalid">मान्य जन्म तिथि दर्ज करें</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="ads_privacy_policy_link">गोपनीयता नीति पढ़ें</string>
+    <string name="ads_privacy_title">विज्ञापनों के बारे में आपकी पसंद</string>
+    <string name="ads_privacy_message">यह ऐप Google AdMob और उसके भागीदारों के विज्ञापन दिखा सकता है। यदि आप विज्ञापनों की अनुमति देते हैं, तो वे विज्ञापन चुनने और मापने के लिए आपकी विज्ञापन आईडी और ऐप गतिविधि का उपयोग कर सकते हैं। विज्ञापन अनुरोधों के बिना जारी रखने के लिए “मेरा डेटा न बेचें या साझा करें” चुनें। इसे आप अधिक → गोपनीयता सेटिंग में कभी भी बदल सकते हैं।</string>
+    <string name="ads_privacy_allow">विज्ञापन और डेटा साझा करने की अनुमति दें</string>
+    <string name="ads_privacy_no_ads">मेरा डेटा न बेचें या साझा करें</string>
     <string name="Menu">और</string>
     <string name="Rate">ऐप को रेट करें</string>
     <string name="Share">ऐप शेयर करें</string>

@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.appsbay.minguoliteratural.R;
 import com.appsbay.minguoliteratural.Tools.AdsHelper;
+import com.appsbay.minguoliteratural.Tools.AgeGate;
 import com.appsbay.minguoliteratural.Tools.BillingManager;
+import com.appsbay.minguoliteratural.Tools.ConsentManager;
 import com.appsbay.minguoliteratural.Tools.DialogChrome;
 import com.appsbay.minguoliteratural.Tools.LocalBroadcastHelper;
 import com.appsbay.minguoliteratural.Tools.LocaleHelper;
@@ -136,6 +138,19 @@ public class MenuFragment extends Fragment {
                 getString(R.string.book_language) + " · "
                         + (bookLanguage == 0 ? "简体中文" : "繁體中文"),
                 MyImage.changeDrawableColor(mContext, R.drawable.nav_language, tint)));
+        if (ConsentManager.get(mContext).hasCompletedRequest()) {
+            menuItems.add(new MenuItem(MenuItem.ACTION_ADVERTISING_AGE,
+                    getString(R.string.age_gate_settings),
+                    MyImage.changeDrawableColor(mContext, R.drawable.nav_bookmark_circle, tint)));
+        }
+        if (ConsentManager.get(mContext).isPrivacyOptionsRequired()) {
+            menuItems.add(new MenuItem(MenuItem.ACTION_PRIVACY,
+                    getString(R.string.privacy_settings),
+                    MyImage.changeDrawableColor(mContext, R.drawable.nav_bookmark_circle, tint)));
+        }
+        menuItems.add(new MenuItem(MenuItem.ACTION_PRIVACY_POLICY,
+                getString(R.string.privacy_policy),
+                MyImage.changeDrawableColor(mContext, R.drawable.icon_right_arrow, tint)));
         menuItems.add(new MenuItem(MenuItem.ACTION_FEEDBACK,
                 getString(R.string.Feedback),
                 MyImage.changeDrawableColor(mContext, R.drawable.icon_feedback, tint)));
@@ -145,14 +160,16 @@ public class MenuFragment extends Fragment {
         menuItems.add(new MenuItem(MenuItem.ACTION_SHARE,
                 getString(R.string.Share),
                 MyImage.changeDrawableColor(mContext, R.drawable.icon_share2, tint)));
-        if (BillingManager.get(mContext).getRemoveAdsPrice() != null
-                || BillingManager.get(mContext).isAdFree()) {
+        if (new AgeGate(mContext).mayRequestAds()
+                && (BillingManager.get(mContext).getRemoveAdsPrice() != null
+                || BillingManager.get(mContext).isAdFree())) {
             menuItems.add(new MenuItem(MenuItem.ACTION_REMOVE_ADS,
                     BillingManager.get(mContext).getRemoveAdsTitle(mContext),
                     MyImage.changeDrawableColor(mContext, R.drawable.nav_bookmark, tint)));
         }
         if (!BillingManager.get(mContext).isAdFree()) {
-            if (!getString(R.string.adRewardedID).isEmpty()) {
+            if (AdsHelper.shouldShowAds(mContext)
+                    && !getString(R.string.adRewardedID).isEmpty()) {
                 String watchTitle = TemporaryAdFree.isActive(mContext)
                         ? getString(R.string.temp_ad_free_active)
                         : getString(R.string.watch_ad_for_24h);

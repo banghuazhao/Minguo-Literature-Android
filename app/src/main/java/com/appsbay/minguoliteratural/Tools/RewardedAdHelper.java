@@ -31,6 +31,7 @@ public final class RewardedAdHelper {
     @Nullable
     private RewardedAd rewardedAd;
     private boolean loading;
+    private int adGeneration;
 
     public static synchronized RewardedAdHelper get(@NonNull Context context) {
         if (instance == null) {
@@ -44,7 +45,7 @@ public final class RewardedAdHelper {
     }
 
     public void preload() {
-        if (BillingManager.get(appContext).isAdFree() || TemporaryAdFree.isActive(appContext)) {
+        if (!AdsHelper.shouldShowAds(appContext)) {
             return;
         }
         if (loading || rewardedAd != null) {
@@ -55,10 +56,12 @@ public final class RewardedAdHelper {
             return;
         }
         loading = true;
+        int generation = adGeneration;
         RewardedAd.load(appContext, adUnitId, new AdRequest.Builder().build(),
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd ad) {
+                        if (generation != adGeneration) return;
                         rewardedAd = ad;
                         loading = false;
                         Log.d(LOG_TAG, "Rewarded ad preloaded");
@@ -66,6 +69,7 @@ public final class RewardedAdHelper {
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        if (generation != adGeneration) return;
                         rewardedAd = null;
                         loading = false;
                         Log.i(LOG_TAG, loadAdError.getMessage());
@@ -78,6 +82,11 @@ public final class RewardedAdHelper {
      */
     public void showForTwentyFourHourAdFree(@NonNull Activity activity) {
         if (activity.isFinishing()) {
+            return;
+        }
+        if (!AdsHelper.shouldShowAds(activity)) {
+            View anchor = DialogChrome.activityAnchor(activity);
+            if (anchor != null) DialogChrome.snack(anchor, R.string.rewarded_ad_unavailable);
             return;
         }
         if (BillingManager.get(activity).isAdFree()) {
@@ -112,10 +121,12 @@ public final class RewardedAdHelper {
             return;
         }
         loading = true;
+        int generation = adGeneration;
         RewardedAd.load(activity, adUnitId, new AdRequest.Builder().build(),
                 new RewardedAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull RewardedAd ad) {
+                        if (generation != adGeneration) return;
                         loading = false;
                         rewardedAd = ad;
                         if (!activity.isFinishing()) {
@@ -125,6 +136,7 @@ public final class RewardedAdHelper {
 
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        if (generation != adGeneration) return;
                         loading = false;
                         rewardedAd = null;
                         Log.i(LOG_TAG, loadAdError.getMessage());
@@ -136,6 +148,12 @@ public final class RewardedAdHelper {
                         }
                     }
                 });
+    }
+
+    public void clearPreloaded() {
+        adGeneration++;
+        rewardedAd = null;
+        loading = false;
     }
 
     private void present(@NonNull Activity activity, @NonNull RewardedAd ad) {

@@ -72,6 +72,10 @@ public final class BillingManager implements PurchasesUpdatedListener {
     private BillingManager(Context appContext) {
         this.appContext = appContext;
         this.prefs = appContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+    }
+
+    /** Fetch product and purchase state only after the advertising gate is open. */
+    public void refreshProducts() {
         ensureConnected(null);
     }
 

@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="Feedback">Comentarios</string>
+    <string name="privacy_settings">Configuración de privacidad</string>
+    <string name="age_gate_settings">Edad para anuncios</string>
+    <string name="age_gate_title">Fecha de nacimiento</string>
+    <string name="age_gate_message">Introduce tu fecha de nacimiento para configurar las opciones de anuncios. Se guarda solo en este dispositivo. Puedes continuar sin introducirla; los anuncios seguirán desactivados. Puedes cambiarla en Más → Edad para anuncios.</string>
+    <string name="age_gate_year">Año</string>
+    <string name="age_gate_month">Mes</string>
+    <string name="age_gate_day">Día</string>
+    <string name="age_gate_continue">Continuar</string>
+    <string name="age_gate_skip">Continuar sin anuncios</string>
+    <string name="age_gate_invalid">Introduce una fecha de nacimiento válida</string>
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="ads_privacy_policy_link">Leer la política de privacidad</string>
+    <string name="ads_privacy_title">Tu elección sobre los anuncios</string>
+    <string name="ads_privacy_message">Esta aplicación puede mostrar anuncios de Google AdMob y sus socios. Si permites los anuncios, pueden usar tu ID de publicidad y tu actividad en la aplicación para seleccionar y medir anuncios. Elige «No vender ni compartir mis datos» para continuar sin solicitudes de anuncios. Puedes cambiarlo en Más → Configuración de privacidad.</string>
+    <string name="ads_privacy_allow">Permitir anuncios y compartir datos</string>
+    <string name="ads_privacy_no_ads">No vender ni compartir mis datos</string>
     <string name="Menu">Más</string>
     <string name="Rate">Valorar la app</string>
     <string name="Share">Compartir la app</string>

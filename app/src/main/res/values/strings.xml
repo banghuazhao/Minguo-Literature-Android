@@ -1,7 +1,24 @@
-<resources>
-    <string name="book_language">Book script</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="book_language" tools:ignore="MissingTranslation">Book script</string>
     <string name="app_name" translatable="false">民国文学</string>
     <string name="Feedback">Feedback</string>
+    <string name="privacy_settings">Privacy settings</string>
+    <string name="age_gate_settings">Age for ads</string>
+    <string name="age_gate_title">Date of birth</string>
+    <string name="age_gate_message">Enter your date of birth to set advertising options. It stays on this device. You can continue without entering it; ads will stay off. You can change it in More → Age for ads.</string>
+    <string name="age_gate_year">Year</string>
+    <string name="age_gate_month">Month</string>
+    <string name="age_gate_day">Day</string>
+    <string name="age_gate_continue">Continue</string>
+    <string name="age_gate_skip">Continue without ads</string>
+    <string name="age_gate_invalid">Enter a valid date of birth</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_policy_url" translatable="false">https://apps-bay.github.io/Apps-Bay-Website/privacy/minguo-literature-android/</string>
+    <string name="ads_privacy_policy_link">Read the privacy policy</string>
+    <string name="ads_privacy_title">Your advertising choice</string>
+    <string name="ads_privacy_message">This app can show ads from Google AdMob and its partners. If you allow ads, they may use your advertising ID and app activity to select and measure ads. Choose “Don’t sell or share my data” to continue without ad requests. You can change this anytime in More → Privacy settings.</string>
+    <string name="ads_privacy_allow">Allow ads and data sharing</string>
+    <string name="ads_privacy_no_ads">Don’t sell or share my data</string>
     <string name="Menu">More</string>
     <string name="Rate">Rate this App</string>
     <string name="Share">Share this App</string>
@@ -152,23 +169,23 @@
     <string name="genre_crime_full">其他</string>
     <string name="Language">Language</string>
     <string name="language_system_default">System default</string>
-    <string name="read_aloud">Read aloud</string>
-    <string name="tts_voice">Voice</string>
-    <string name="tts_voice_auto">Automatic (book script)</string>
-    <string name="tts_voice_mainland">Chinese · Mainland</string>
-    <string name="tts_voice_taiwan">Chinese · Taiwan</string>
-    <string name="tts_voice_hong_kong">Chinese · Hong Kong</string>
-    <string name="tts_speed">Speed</string>
-    <string name="tts_speed_value">Speed: %1$.1f×</string>
-    <string name="tts_ready">Ready to read</string>
-    <string name="tts_initializing">Preparing voice…</string>
-    <string name="tts_reading">Reading aloud</string>
-    <string name="tts_paused">Paused</string>
-    <string name="tts_start">Start</string>
-    <string name="tts_pause">Pause</string>
-    <string name="tts_resume">Resume</string>
-    <string name="tts_stop">Stop</string>
-    <string name="tts_no_text">No text to read in this chapter</string>
-    <string name="tts_voice_unavailable">The selected Chinese voice is unavailable on this device</string>
-    <string name="tts_start_failed">Could not start read aloud</string>
+    <string name="read_aloud" tools:ignore="MissingTranslation">Read aloud</string>
+    <string name="tts_voice" tools:ignore="MissingTranslation">Voice</string>
+    <string name="tts_voice_auto" tools:ignore="MissingTranslation">Automatic (book script)</string>
+    <string name="tts_voice_mainland" tools:ignore="MissingTranslation">Chinese · Mainland</string>
+    <string name="tts_voice_taiwan" tools:ignore="MissingTranslation">Chinese · Taiwan</string>
+    <string name="tts_voice_hong_kong" tools:ignore="MissingTranslation">Chinese · Hong Kong</string>
+    <string name="tts_speed" tools:ignore="MissingTranslation">Speed</string>
+    <string name="tts_speed_value" tools:ignore="MissingTranslation">Speed: %1$.1f×</string>
+    <string name="tts_ready" tools:ignore="MissingTranslation">Ready to read</string>
+    <string name="tts_initializing" tools:ignore="MissingTranslation">Preparing voice…</string>
+    <string name="tts_reading" tools:ignore="MissingTranslation">Reading aloud</string>
+    <string name="tts_paused" tools:ignore="MissingTranslation">Paused</string>
+    <string name="tts_start" tools:ignore="MissingTranslation">Start</string>
+    <string name="tts_pause" tools:ignore="MissingTranslation">Pause</string>
+    <string name="tts_resume" tools:ignore="MissingTranslation">Resume</string>
+    <string name="tts_stop" tools:ignore="MissingTranslation">Stop</string>
+    <string name="tts_no_text" tools:ignore="MissingTranslation">No text to read in this chapter</string>
+    <string name="tts_voice_unavailable" tools:ignore="MissingTranslation">The selected Chinese voice is unavailable on this device</string>
+    <string name="tts_start_failed" tools:ignore="MissingTranslation">Could not start read aloud</string>
 </resources>

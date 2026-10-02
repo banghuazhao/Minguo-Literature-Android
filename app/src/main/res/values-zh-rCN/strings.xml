@@ -2,6 +2,22 @@
 <resources>
     <string name="book_language">书籍文字</string>
     <string name="Feedback">意见反馈</string>
+    <string name="privacy_settings">隐私设置</string>
+    <string name="age_gate_settings">广告年龄设置</string>
+    <string name="age_gate_title">出生日期</string>
+    <string name="age_gate_message">请输入出生日期，以设置广告选项。日期仅保存在此设备上。你也可以不填写而继续使用，广告将保持关闭。你可以在“更多 → 广告年龄设置”中更改。</string>
+    <string name="age_gate_year">年</string>
+    <string name="age_gate_month">月</string>
+    <string name="age_gate_day">日</string>
+    <string name="age_gate_continue">继续</string>
+    <string name="age_gate_skip">不看广告继续</string>
+    <string name="age_gate_invalid">请输入有效的出生日期</string>
+    <string name="privacy_policy">隐私政策</string>
+    <string name="ads_privacy_policy_link">阅读隐私政策</string>
+    <string name="ads_privacy_title">你的广告选择</string>
+    <string name="ads_privacy_message">本应用可展示 Google AdMob 及其合作伙伴的广告。如果你允许广告，他们可能使用你的广告 ID 和应用内活动来选择和衡量广告。选择“不出售或共享我的数据”后，应用不会发起广告请求。你可以随时在“更多 → 隐私设置”中更改。</string>
+    <string name="ads_privacy_allow">允许广告和数据共享</string>
+    <string name="ads_privacy_no_ads">不出售或共享我的数据</string>
     <string name="Menu">更多</string>
     <string name="Rate">给应用评分</string>
     <string name="Share">分享应用</string>

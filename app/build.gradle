@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.gms.google-services'
 }
 
 def localProperties = new Properties()
@@ -16,8 +15,38 @@ if (hasKeystore) {
     keystorePropertiesFile.withReader('UTF-8') { reader -> keystoreProperties.load(reader) }
 }
 
-def adMobAppId = localProperties.getProperty('AdMobAppId',
-        'ca-app-pub-3940256099942544~3347511713')
+def releaseAdIds = [
+        AdMobAppId: localProperties.getProperty('AdMobAppId')?.trim(),
+        adBannerID: localProperties.getProperty('adBannerID')?.trim(),
+        adInterstitialID: localProperties.getProperty('adInterstitialID')?.trim(),
+        adAppOpenID: localProperties.getProperty('adAppOpenID')?.trim(),
+        adRewardedID: localProperties.getProperty('adRewardedID')?.trim()
+]
+
+def validateReleaseConfig = tasks.register('validateReleaseConfig') {
+    doLast {
+        def publisherIds = [] as Set
+        releaseAdIds.each { key, rawValue ->
+            def value = rawValue?.trim()
+            def pattern = key == 'AdMobAppId'
+                    ? ~/^ca-app-pub-(\d{16})~\d{10}$/
+                    : ~/^ca-app-pub-(\d{16})\/\d{10}$/
+            def match = value == null ? null : (value =~ pattern)
+            if (match == null || !match.matches() || match.group(1) == '3940256099942544') {
+                throw new GradleException("Missing or invalid production ${key} in local.properties")
+            }
+            publisherIds.add(match.group(1))
+        }
+        if (publisherIds.size() != 1) {
+            throw new GradleException('Release AdMob IDs must belong to the same publisher')
+        }
+        if (!hasKeystore || ['storeFile', 'storePassword', 'keyAlias', 'keyPassword'].any {
+            !keystoreProperties.getProperty(it)?.trim()
+        } || !file(keystoreProperties.getProperty('storeFile')).isFile()) {
+            throw new GradleException('Release keystore configuration is missing or incomplete')
+        }
+    }
+}
 
 android {
     namespace 'com.appsbay.minguoliteratural'
@@ -30,7 +59,8 @@ android {
         versionCode 12
         versionName '1.3.0'
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        manifestPlaceholders = [AdMobAppId: adMobAppId]
+        manifestPlaceholders = [AdMobAppId: 'ca-app-pub-3940256099942544~3347511713']
+        buildConfigField 'String', 'CONSENT_TEST_GEOGRAPHY', '"NONE"'
     }
 
     signingConfigs {
@@ -47,21 +77,38 @@ android {
     buildTypes {
         release {
             if (hasKeystore) signingConfig signingConfigs.release
+            manifestPlaceholders = [AdMobAppId: releaseAdIds.AdMobAppId ?: 'MISSING_RELEASE_AdMobAppId']
             minifyEnabled true
             shrinkResources true
+            ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            resValue 'string', 'adBannerID', localProperties['adBannerID'] ?: ''
-            resValue 'string', 'adInterstitialID', localProperties['adInterstitialID'] ?: ''
-            resValue 'string', 'adNativeID', localProperties['adNativeID'] ?: ''
-            resValue 'string', 'adAppOpenID', localProperties['adAppOpenID'] ?: ''
-            resValue 'string', 'adRewardedID', localProperties['adRewardedID'] ?: ''
+            resValue 'string', 'adBannerID', releaseAdIds.adBannerID ?: 'MISSING_RELEASE_adBannerID'
+            resValue 'string', 'adInterstitialID', releaseAdIds.adInterstitialID ?: 'MISSING_RELEASE_adInterstitialID'
+            resValue 'string', 'adAppOpenID', releaseAdIds.adAppOpenID ?: 'MISSING_RELEASE_adAppOpenID'
+            resValue 'string', 'adRewardedID', releaseAdIds.adRewardedID ?: 'MISSING_RELEASE_adRewardedID'
         }
         debug {
             resValue 'string', 'adBannerID', 'ca-app-pub-3940256099942544/6300978111'
             resValue 'string', 'adInterstitialID', 'ca-app-pub-3940256099942544/1033173712'
-            resValue 'string', 'adNativeID', 'ca-app-pub-3940256099942544/2247696110'
             resValue 'string', 'adAppOpenID', 'ca-app-pub-3940256099942544/3419835294'
             resValue 'string', 'adRewardedID', 'ca-app-pub-3940256099942544/5224354917'
+        }
+        privacyUsQa {
+            initWith release
+            matchingFallbacks = ['release']
+            buildConfigField 'String', 'CONSENT_TEST_GEOGRAPHY', '"US"'
+        }
+        privacyEeaQa {
+            initWith release
+            matchingFallbacks = ['release']
+            buildConfigField 'String', 'CONSENT_TEST_GEOGRAPHY', '"EEA"'
+        }
+        privacyOtherQa {
+            initWith release
+            matchingFallbacks = ['release']
+            buildConfigField 'String', 'CONSENT_TEST_GEOGRAPHY', '"OTHER"'
         }
     }
     compileOptions {
@@ -74,6 +121,13 @@ android {
     }
 }
 
+tasks.configureEach {
+    if (name in ['preReleaseBuild', 'prePrivacyUsQaBuild',
+                 'prePrivacyEeaQaBuild', 'prePrivacyOtherQaBuild']) {
+        dependsOn validateReleaseConfig
+    }
+}
+
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation 'androidx.core:core:1.19.0'
@@ -83,19 +137,17 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:25.4.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
     implementation 'com.google.code.gson:gson:2.14.0'
     implementation 'com.android.billingclient:billing:9.1.0'
     implementation project(':shinebuttonlib')
 
-    implementation platform('com.google.firebase:firebase-bom:34.17.0')
-    implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.lifecycle:lifecycle-runtime:2.11.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.11.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.11.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.11.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
-    implementation 'com.google.ads.mediation:facebook:6.22.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:core:1.7.0'

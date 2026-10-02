@@ -46,7 +46,9 @@ app/google-services.json
 ```
 
 ### Step 4: Build and Run the App
-Build the project and run it on an Android emulator or physical device. Debug builds use Google test ad units. Release ad unit IDs can be set in the untracked `local.properties` file; the optional `remove_ads` product must be created for this app in Play Console before its purchase option appears.
+Build the project and run it on an Android emulator or physical device. Debug builds use Google test ad units. Release builds require a production `AdMobAppId`, `adBannerID`, `adInterstitialID`, `adAppOpenID`, and `adRewardedID` in the untracked `local.properties` file. They also require an ignored `keystore.properties` file pointing to the upload keystore. The build fails if these values are missing or invalid. The optional `remove_ads` product must be created for this app in Play Console before its purchase option appears.
+
+Advertising starts only after the local birth-date screen establishes eligibility and the regional privacy choice allows ads. An omitted birth date or an age below 21 leaves reading available without ad SDK initialization. The `privacyUsQa`, `privacyEeaQa`, and `privacyOtherQa` build types use release settings with forced UMP test geography for emulator checks; never upload these QA APKs to Play.
 
 ## Repository
 

@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.appsbay.minguoliteratural.Controller.Menu.MenuFragment;
 import com.appsbay.minguoliteratural.R;
 import com.appsbay.minguoliteratural.Tools.BookMotion;
+import com.appsbay.minguoliteratural.Tools.AgeGate;
+import com.appsbay.minguoliteratural.Tools.ConsentManager;
 import com.appsbay.minguoliteratural.Tools.MyColor;
 import com.appsbay.minguoliteratural.Tools.RateItDialogFragment;
 import com.appsbay.minguoliteratural.Tools.ScreenChrome;
@@ -28,11 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private MenuFragment fragment3;
     private FragmentManager fm;
     private Fragment active;
+    private boolean ratePromptChecked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        ratePromptChecked = savedInstanceState != null
+                && savedInstanceState.getBoolean("ratePromptChecked", false);
 
         setContentView(R.layout.activity_main);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -61,10 +66,6 @@ public class MainActivity extends AppCompatActivity {
         setDestinationTitle(titleRes);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        if (savedInstanceState == null) {
-            RateItDialogFragment.show(this, getSupportFragmentManager());
-        }
-
         bottomNav.setOnNavigationItemReselectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
                 fragment1.scrollToTop();
@@ -78,6 +79,31 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             BookMotion.revealOnce(findViewById(R.id.fragment_container));
         }
+
+        new AgeGate(this).request(this, () -> {
+            ConsentManager consent = ConsentManager.get(this);
+            boolean consentWasResolved = consent.hasCompletedRequest();
+            consent.request(this, () -> {
+                if (!consentWasResolved && !isFinishing() && !isDestroyed()) {
+                    recreate();
+                }
+            });
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!ratePromptChecked && ConsentManager.get(this).hasCompletedRequest()) {
+            ratePromptChecked = true;
+            RateItDialogFragment.show(this, getSupportFragmentManager());
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean("ratePromptChecked", ratePromptChecked);
+        super.onSaveInstanceState(outState);
     }
 
     private void restoreOrCreateFragments(Bundle savedInstanceState) {
